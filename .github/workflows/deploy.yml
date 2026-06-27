@@ -27,12 +27,12 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: Build, Tag, and Push Image to ECR
-      # Mantenemos la ruta de trabajo que demostró compilar con éxito
-      working-directory: ./back-Ventas_SpringBoot/Springboot-API-REST
+      # Ruta real donde se encuentra tu código fuente (src) y el pom.xml
+      working-directory: ./back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        # 👇 CORREGIDO: Usamos el nombre exacto de tu captura de AWS
-        ECR_REPOSITORY: back-ventas
+        # Nombre exacto de tu repositorio ECR en AWS para despachos
+        ECR_REPOSITORY: back-despachos
         IMAGE_TAG: latest
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
@@ -40,5 +40,5 @@ jobs:
 
     - name: Deploy to Amazon ECS
       run: |
-        # 👇 REVISA: Asegúrate de que el servicio en tu cluster de ECS se llame así para Ventas
-        aws ecs update-service --cluster solenme-cluster --service service-back-ventas --force-new-deployment --region us-east-1
+        # Actualiza el servicio en el clúster usando la nueva imagen
+        aws ecs update-service --cluster solenme-cluster --service service-back-despachos --force-new-deployment --region us-east-1
