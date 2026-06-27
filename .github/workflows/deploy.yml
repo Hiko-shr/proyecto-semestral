@@ -27,11 +27,10 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: Build, Tag, and Push Image to ECR
-      # Ruta real donde se encuentra tu código fuente (src) y el pom.xml
-      working-directory: ./back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
+      # 👇 CORREGIDO: Apuntamos directamente a la carpeta raíz de Despachos
+      working-directory: ./back-Despachos_SpringBoot
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        # Nombre exacto de tu repositorio ECR en AWS para despachos
         ECR_REPOSITORY: back-despachos
         IMAGE_TAG: latest
       run: |
@@ -40,5 +39,4 @@ jobs:
 
     - name: Deploy to Amazon ECS
       run: |
-        # Actualiza el servicio en el clúster usando la nueva imagen
         aws ecs update-service --cluster solenme-cluster --service service-back-despachos --force-new-deployment --region us-east-1
