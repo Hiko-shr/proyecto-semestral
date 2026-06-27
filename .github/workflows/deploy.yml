@@ -27,11 +27,12 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: Build, Tag, and Push Image to ECR
-      # 👇 RUTA ACTUALIZADA DONDE QUEDÓ EL DOCKERFILE TRAS EL MERGE DE GIT
+      # Mantenemos la ruta de trabajo que demostró compilar con éxito
       working-directory: ./back-Ventas_SpringBoot/Springboot-API-REST
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: tu-repositorio-ecr-ventas # 👈 REVISA PONER TU ECR REAL AQUÍ
+        # 👇 CORREGIDO: Usamos el nombre exacto de tu captura de AWS
+        ECR_REPOSITORY: back-ventas
         IMAGE_TAG: latest
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
@@ -39,5 +40,5 @@ jobs:
 
     - name: Deploy to Amazon ECS
       run: |
+        # 👇 REVISA: Asegúrate de que el servicio en tu cluster de ECS se llame así para Ventas
         aws ecs update-service --cluster solenme-cluster --service service-back-ventas --force-new-deployment --region us-east-1
-        # 👆 REVISA PONER TU SERVICIO ECS REAL AQUÍ
