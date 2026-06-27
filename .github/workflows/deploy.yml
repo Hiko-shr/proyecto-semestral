@@ -27,11 +27,13 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: Build, Tag, and Push Image to ECR
-      # 👇 AQUÍ LE DECIMOS A GITHUB EN QUÉ CARPETA ESTÁ EL DOCKERFILE
-      working-directory: ./ventas  # <--- CAMBIA "ventas" por el nombre exacto de tu carpeta (ej: ./despachos)
+      # 👇 CAMBIA "NombreDeTuCarpetaReal" POR EL NOMBRE EXACTO EN TU GITHUB.
+      # (Si no tienes carpetas y los archivos están sueltos, simplemente BORRA esta línea 32)
+      working-directory: ./NombreDeTuCarpetaReal
+      
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: tu-repositorio-ecr-ventas # <--- CAMBIA ESTO por el nombre de tu repositorio en ECR
+        ECR_REPOSITORY: tu-repositorio-ecr-ventas # 👈 Pon tu repositorio de ECR
         IMAGE_TAG: latest
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
@@ -40,4 +42,4 @@ jobs:
     - name: Deploy to Amazon ECS
       run: |
         aws ecs update-service --cluster solenme-cluster --service service-back-ventas --force-new-deployment --region us-east-1
-        # 👆 CAMBIA "service-back-ventas" por el nombre exacto de tu servicio en ECS
+        # 👆 Revisa que "service-back-ventas" sea el nombre exacto de tu servicio
